@@ -1,0 +1,123 @@
+---
+title: "hw1-pstat131"
+author: "Fang"
+date: '2022-10-02'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+### Define supervised and unsupervised learning. What are the difference(s) between them?
+
+Supervised learning include a response column and unsupervised learning doen not contain the respond column.
+With supervised learning, you can measure the model's performance and unsupervised learning, you can clastur the observations together based on liked observations, but you can't measure model performance. 
+
+## Question 2
+### Explain the difference between a regression model and a classification model, specifically in the context of machine learning.
+
+Regression model, the response column is quntititive, but the classification model, the respond column is qualitative. 
+
+### Question 3
+### Name two commonly used metrics for regression ML problems. Name two commonly used metrics for classification ML problems.
+Brandon is online
+
+BOBO is online
+
+2 commonly used error metrics for regression based problems are Mean Squared Error and root mean squared error. 
+
+2 Commonly used metrics for classification based problems are accuracy and AUC (area under the curve).
+
+### Question 4
+DESCRIPTIVE:
+Choose model to best visually emphasize a trend
+in data. i.e., using a line on a scatterplot.
+
+PREDICTIVE:
+The goal is to predict respond column with minimum reducible error.
+Not focused on hypothesis tests. 
+
+Inferential:
+The goal of inferential models is to determine which predictors are most associated with a response and to make some type of causal claim.
+
+### Question5
+sub1:
+The goal of inferential models is to determine which predictors are most associated with a response and to make some type of causal claim. 
+
+Mechanistic makes an assumption of the function that fits the data, but we won't know the true function. We can add as many parameters as needed, but risk overfitting the model. 
+
+Empirical models do not assume a particular function fits the data. These models can be very flexible and require a lot of data, but can also overfit the data. 
+
+sub2:
+Similar because they both can overfit the data. 
+Different because mechanistic assumes a function should fit the data, whereas empirical models do not assume this. 
+
+Mechanistic is easier to understand because we know what the estimated function fit to the data is. 
+and the parameters included in the function. 
+
+sub3:
+bias variance tradeoff is related to the various models because this is something we need to consider when fitting any model to the data. 
+
+We want to reduce how wrong we are (bias) and when our models sees different or new datasets, we want to minimize the variance in the error metric we see each time. 
+
+
+
+##Question 6
+
+1st part of Q6: This is predictive because we are trying the predict a probability or likelihood we vote for a particular candidate.  
+
+
+2nd part: This is inferential because we are trying to establish a case/effect relationship of personal contact with a candidate and the likelihood of voting for that candidate. 
+
+
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+#load mpg data
+data("mpg")
+
+# Exercise 1
+ggplot(data = mpg, aes(x = hwy)) + geom_histogram(fill = "blue") +
+  labs(x = "Highway", y ="Frequency", title = "Histogram of MPG") +
+  theme_classic()
+#A lot of cars are clustered in the 15-20 mpg range and there's another cluster in the 25-25 range
+
+# Exercise 2
+ggplot(data = mpg, aes(x = hwy, y = cty)) + geom_point(color = "blue") + 
+  geom_smooth(method = "lm") +
+  labs(x = "Highway", y ="City", title = "Relationship between Highway and City") +
+  theme_minimal()
+# There is a positive and linear relationship between highway and city. 
+
+#Exercise 3
+#reorganize data to get the manufacturer and the number of cars they produced
+df<- mpg %>% group_by(manufacturer) %>% summarise(count = n())
+
+ggplot(data = df, aes(x = reorder(manufacturer, count), y = count)) + geom_bar(stat = "identity", fill = "purple") + 
+  coord_flip() + 
+  labs(x = "Number of Cars Produced", y = "Manufacturer") + 
+  theme_minimal()
+
+#Exercise 4
+ggplot(data = mpg, aes(x = factor(cyl), y = hwy)) + geom_boxplot() + 
+  labs(x = "Cylinder", y  = "Highway MPG") + 
+  theme_minimal()
+#Higher cylinder cars get less MPG
+#Cylinder presents iteself as integer, but it's really categorical (discrete) -- so, need to change it to a factor in R
+
+#Exercise 5
+install.packages("corrplot")
+library(corrplot)
+
+#Create correlation matrix of only numeric columns
+df_cor<- mpg %>% select_if(is.numeric) %>% cor()
+
+corrplot(df_cor, type = "lower" )
+#highly correlated variables are cylinder & dispacement, cty and displ, hwy & displ, cty & cyl, hwy & cyl, and hwy & cty
+
+
+
+```
+
